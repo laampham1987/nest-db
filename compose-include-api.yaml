@@ -23,6 +23,28 @@ services:
     networks:
       - node-network
 
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - NODE_ENV=development
+    depends_on:
+      - postgres_db
+    links:
+      - postgres_db
+    environment:
+      PORT: 3000
+    ports:
+      - '3000:3000'
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: >
+      npm run start:dev
+    networks:
+      - node-network
+
 volumes:
   # for persistence between restarts
   postgres_data:
